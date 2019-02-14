@@ -1,5 +1,7 @@
 from tkinter import *
-import application  as app
+from threading import Thread
+import application as app
+import excecute as exe
 
 global root
 root = Tk()
@@ -9,6 +11,12 @@ sp = or_ = dr = 0
 
 def main():
     root.geometry("350x150")
+    #Threading Proccesses
+    thread = Thread(target=exe.analogTmp_get())
+    thread2 = Thread(target=exe.analogCurrent_get())
+    thread.start()
+    thread2.start()
+
     #Labels
     onRamp_lbl()
     speed_lbl()
