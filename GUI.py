@@ -1,5 +1,8 @@
+#STD Python Librayies
 from tkinter import *
 from threading import Thread
+
+#Personal Python Libraries
 import application as app
 import excecute as exe
 
