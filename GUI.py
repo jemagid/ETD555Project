@@ -12,20 +12,22 @@ root = Tk()
 global sp,or_,dr
 sp = or_ = dr = 0
 
+def loop():
+    exe.getCur()
+    exe.reset()
+    exe.EMERGENCY()
+
 def main():
     root.geometry("350x150")
     #Threading Proccesses
-    thread = Thread(target=exe.analogTmp_get())
-    thread2 = Thread(target=exe.analogCurrent_get())
+    thread = Thread(target=loop())
     thread.start()
-    thread2.start()
 
     #Labels
     onRamp_lbl()
     speed_lbl()
     downRamp_lbl()
-    mosfet_temp()
-    temperature_measure()
+    #temperature_measure()
     current_motor()
     current_measure()
 
@@ -35,27 +37,17 @@ def main():
     downRamp()
 
     #Buttons
-    clockwise()
-    counterClockwise()
-    start()
+    clockwise("enabled")
+    counterClockwise("enabled")
+    start("enabled")
 
     #Run GUI
     root.mainloop()
-
-def temperature_measure():
-    tmp = Label(root,text=str(app.getTmp()))
-    tmp.grid()
-    tmp.place(x=115,y=130)
 
 def current_measure():
     current = Label(root,text=str(app.getCurrent()))
     current.grid()
     current.place(x=215,y=130)
-
-def mosfet_temp():
-    tmp = Label(root,text="Mosfet Temp: ")
-    tmp.grid()
-    tmp.place(x=25,y=130)
 
 def current_motor():
     current = Label(root,text="Motor Current: ")
@@ -77,18 +69,20 @@ def downRamp_lbl():
     downramplbl.grid()
     downramplbl.place(x=225,y=10)
 
-def clockwise():
-    cw = Button(root, text="Clockwise",COMMAND=app.clockwise_Rotation())
+def clockwise(state_):
+    direction = 1
+    cw = Button(root, text="Clockwise",COMMAND=app.clockwise_Rotation(direction),state=state_)
     cw.grid()
     cw.place(x=25,y=70,width=150)
 
-def counterClockwise():
-    ccw = Button(root, text="Counter Clockwise",COMMAND=app.counter_clockwise_Rotation())
+def counterClockwise(state_):
+    direction = -1
+    ccw = Button(root, text="Counter Clockwise",COMMAND=app.counter_clockwise_Rotation(direction),state=state_)
     ccw.grid()
     ccw.place(x=175,y=70,width=150)
 
-def start():
-    s = Button(root, text="Start",COMMAND=app.start_motor())
+def start(state_):
+    s = Button(root, text="Start",COMMAND=app.start_motor(),state=state_)
     s.grid()
     s.place(x=25,y=100, width=300)
 
@@ -109,6 +103,11 @@ def downRamp():
     dr.grid()
     dr.get()
     dr.place(x=225,y=30)
+"""
+def reciveTmp_Curr():
+    exe.analogTmp_get()
+    exe.analogCurrent_get()
+"""
 
 def getUp():
     return or_
