@@ -13,9 +13,10 @@ global sp,or_,dr
 sp = or_ = dr = 0
 
 def loop():
+    exe.motorDirection(0)
     exe.getCur()
-    exe.reset()
-    exe.EMERGENCY()
+    exe.reset(0)
+    exe.EMERGENCY(1)
 
 def main():
     root.geometry("350x150")
@@ -27,19 +28,13 @@ def main():
     onRamp_lbl()
     speed_lbl()
     downRamp_lbl()
-    #temperature_measure()
     current_motor()
     current_measure()
-
-    #Sliders
-    onRamp()
-    speed()
-    downRamp()
-
+    
     #Buttons
-    clockwise("enabled")
-    counterClockwise("enabled")
-    start("enabled")
+    clockwise("active")
+    counterClockwise("active")
+    start("start","active")
 
     #Run GUI
     root.mainloop()
@@ -71,52 +66,50 @@ def downRamp_lbl():
 
 def clockwise(state_):
     direction = 1
-    cw = Button(root, text="Clockwise",COMMAND=app.clockwise_Rotation(direction),state=state_)
+    cw = Button(root, text="Clockwise",command=app.startMotor(),state=state_)
     cw.grid()
     cw.place(x=25,y=70,width=150)
 
 def counterClockwise(state_):
     direction = -1
-    ccw = Button(root, text="Counter Clockwise",COMMAND=app.counter_clockwise_Rotation(direction),state=state_)
+    ccw = Button(root, text="Counter Clockwise",command=app.motorRotation(direction),state=state_)
     ccw.grid()
     ccw.place(x=175,y=70,width=150)
 
-def start(state_):
-    s = Button(root, text="Start",COMMAND=app.start_motor(),state=state_)
+def start(value,state_):
+    s = Button(root, text=value,command=app.start_motor(),state=state_)
     s.grid()
     s.place(x=25,y=100, width=300)
 
-def onRamp():
+def onRamp(val):
     or_ = Scale(root, from_=10, to=1000,orient=HORIZONTAL)
     or_.grid()
     or_.get()
     or_.place(x=25,y=30)
+    or_.set(val)
 
-def speed():
+def speed(val):
     sp = Scale(root, from_=0, to=100,orient=HORIZONTAL)
     sp.grid()
     sp.get()
     sp.place(x=125,y=30)
+    sp.set(val)
 
-def downRamp():
+def downRamp(val):
     dr = Scale(root, from_=10, to=1000,orient=HORIZONTAL)
     dr.grid()
     dr.get()
     dr.place(x=225,y=30)
-"""
-def reciveTmp_Curr():
-    exe.analogTmp_get()
-    exe.analogCurrent_get()
-"""
+    dr.set(val)
 
-def getUp():
-    return or_
+def changeSpeed(opt):    # initializing dutyCycle for slope
+    if(opt == -1 ):                         #Calculate downramp speed
+        dutyCycle.set(dutyCycle.get() -(sp.get()/dnRampScale.get()))
+    else:                                   #Calculate upramp speed
+       dutyCycle.set(dutyCycle.get() + (speedScale.get()/upRampScale.get()))
+    print("Duty Cycle: ", dutyCycle.get(), " %")
+    
 
-def getDown():
-    return dr
-
-def getSpeed():
-    return sp
 
 if __name__ == "__main__":
     main()

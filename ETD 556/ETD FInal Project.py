@@ -1,9 +1,9 @@
 """
-FIO0 - Start Pin 6
-FIO2 - Direction Pin 5
-FIO4 Emergency Stop Pin 4
-FIO6 - Power Pin 3
-AIN - Current Pin 12
+FIO0 - Start - Pin 6
+FIO2 - Direction - Pin 5
+FIO4 Emergency Stop - Pin 4
+FIO6 - Power - Pin 3
+AIN - Current - Pin 12
 """
 import ue9
 import LabJackPython as lj
